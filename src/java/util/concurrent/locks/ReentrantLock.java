@@ -135,6 +135,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
       final Thread current = Thread.currentThread();
       int c = getState();
       if (c == 0) {
+        /// 比公平锁的tryAcquire方法在第二个if判断中少了一个是否存在前继节点判断
         if (compareAndSetState(0, acquires)) {
           setExclusiveOwnerThread(current);
           return true;
@@ -210,6 +211,9 @@ public class ReentrantLock implements Lock, java.io.Serializable {
      * Performs lock.  Try immediate barge, backing up to normal
      * acquire on failure.
      */
+    /*/
+     * 注意和公平方式的区别
+     */
     final void lock() {
       if (compareAndSetState(0, 1)) {
         setExclusiveOwnerThread(Thread.currentThread());
@@ -241,7 +245,14 @@ public class ReentrantLock implements Lock, java.io.Serializable {
     protected final boolean tryAcquire(int acquires) {
       final Thread current = Thread.currentThread();
       int c = getState();
+      /// state表示加锁的次数
       if (c == 0) {
+        /*/
+         * 首先判断是否有前继结点，如果没有则当前队列中还没有其他线程；
+         * 设置状态为acquires，即lock方法中写死的1,
+         * 这里为什么不直接setState？因为可能同时有多个线程同时在执行到此处，所以用CAS来执行；
+         * 设置当前线程独占锁。
+         */
         if (!hasQueuedPredecessors() &&
             compareAndSetState(0, acquires)) {
           setExclusiveOwnerThread(current);
@@ -252,6 +263,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
         if (nextc < 0) {
           throw new Error("Maximum lock count exceeded");
         }
+        /// 为什么不用compareAndSetState？因为独占锁的线程已经是当前线程，不需要通过CAS来设置。
         setState(nextc);
         return true;
       }
@@ -438,7 +450,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
    * over reporting the elapse of the waiting time.
    *
    * @param timeout the time to wait for the lock
-   * @param unit the time unit of the timeout argument
+   * @param unit    the time unit of the timeout argument
    * @return {@code true} if the lock was free and was acquired by the current thread, or the lock
    * was already held by the current thread; and {@code false} if the waiting time elapsed before
    * the lock could be acquired
@@ -689,8 +701,8 @@ public class ReentrantLock implements Lock, java.io.Serializable {
    * @param condition the condition
    * @return {@code true} if there are any waiting threads
    * @throws IllegalMonitorStateException if this lock is not held
-   * @throws IllegalArgumentException if the given condition is not associated with this lock
-   * @throws NullPointerException if the condition is null
+   * @throws IllegalArgumentException     if the given condition is not associated with this lock
+   * @throws NullPointerException         if the condition is null
    */
   public boolean hasWaiters(Condition condition) {
     if (condition == null) {
@@ -713,8 +725,8 @@ public class ReentrantLock implements Lock, java.io.Serializable {
    * @param condition the condition
    * @return the estimated number of waiting threads
    * @throws IllegalMonitorStateException if this lock is not held
-   * @throws IllegalArgumentException if the given condition is not associated with this lock
-   * @throws NullPointerException if the condition is null
+   * @throws IllegalArgumentException     if the given condition is not associated with this lock
+   * @throws NullPointerException         if the condition is null
    */
   public int getWaitQueueLength(Condition condition) {
     if (condition == null) {
@@ -739,8 +751,8 @@ public class ReentrantLock implements Lock, java.io.Serializable {
    * @param condition the condition
    * @return the collection of threads
    * @throws IllegalMonitorStateException if this lock is not held
-   * @throws IllegalArgumentException if the given condition is not associated with this lock
-   * @throws NullPointerException if the condition is null
+   * @throws IllegalArgumentException     if the given condition is not associated with this lock
+   * @throws NullPointerException         if the condition is null
    */
   protected Collection<Thread> getWaitingThreads(Condition condition) {
     if (condition == null) {
