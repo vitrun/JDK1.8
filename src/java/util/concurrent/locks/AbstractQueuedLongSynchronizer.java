@@ -35,11 +35,12 @@
 
 package java.util.concurrent.locks;
 
-import java.util.concurrent.TimeUnit;
+import sun.misc.Unsafe;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import sun.misc.Unsafe;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A version of {@link AbstractQueuedSynchronizer} in
@@ -431,6 +432,7 @@ public abstract class AbstractQueuedLongSynchronizer
    *
    * @param node the node
    */
+  /// 根据CLH队列的FIFO规则，“当前线程”(即已经获取锁的线程)肯定是head；如果CLH队列非空的话，则唤醒锁的下一个等待线程
   private void unparkSuccessor(Node node) {
         /*
          * If status is negative (i.e., possibly needing signal) try

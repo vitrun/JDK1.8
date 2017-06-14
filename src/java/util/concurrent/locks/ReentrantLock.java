@@ -135,7 +135,9 @@ public class ReentrantLock implements Lock, java.io.Serializable {
       final Thread current = Thread.currentThread();
       int c = getState();
       if (c == 0) {
-        /// 比公平锁的tryAcquire方法在第二个if判断中少了一个是否存在前继节点判断
+        /// 比公平锁的tryAcquire方法在第二个if判断中少了一个是否存在前继节点判断,  也就是说:
+        // 公平锁在尝试获取锁时，即使“锁”没有被任何线程锁持有，它也会判断自己是不是CLH等待队列的表头；是的话，才获取锁。
+        // 而非公平锁在尝试获取锁时，如果“锁”没有被任何线程持有，则不管它在CLH队列的何处，它都直接获取锁。
         if (compareAndSetState(0, acquires)) {
           setExclusiveOwnerThread(current);
           return true;
@@ -212,7 +214,9 @@ public class ReentrantLock implements Lock, java.io.Serializable {
      * acquire on failure.
      */
     /*/
-     * 注意和公平方式的区别
+     * 注意和公平方式的区别,
+     * 公平锁 -- 公平锁的lock()函数，会直接调用acquire(1)。
+     * 非公平锁 -- 非公平锁会先判断当前锁的状态是不是空闲，是的话，就不排队，而是直接获取锁。
      */
     final void lock() {
       if (compareAndSetState(0, 1)) {
