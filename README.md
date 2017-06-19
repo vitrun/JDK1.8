@@ -13,5 +13,5 @@
   - [Java多线程系列--“JUC锁”11之 Semaphore信号量的原理和示例 | skywang](http://wangkuiwu.github.io/2012/08/13/juc-lock11/)
 
 - COLLECTION
-  - [Why the maximum array size of ArrayList is Integer.MAX\_VALUE - 8] (https://stackoverflow.com/questions/35756277/why-the-maximum-array-size-of-arraylist-is-integer-max-value-8)
-  - [Java 集合系列01之 总体框架] (http://wangkuiwu.github.io/2012/02/01/collection-01-summary/)
+  - [Why the maximum array size of ArrayList is Integer.MAX\_VALUE - 8](https://stackoverflow.com/questions/35756277/why-the-maximum-array-size-of-arraylist-is-integer-max-value-8)
+  - [Java 集合系列01之 总体框架](http://wangkuiwu.github.io/2012/02/01/collection-01-summary/)
