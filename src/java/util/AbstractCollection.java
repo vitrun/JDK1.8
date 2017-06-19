@@ -142,11 +142,14 @@ public abstract class AbstractCollection<E> implements Collection<E> {
     Iterator<E> it = iterator();
     for (int i = 0; i < r.length; i++) {
       if (!it.hasNext()) // fewer elements than expected
+        /// 因为是以iterator为准（size可能中途变化），所以得考虑不一致的情况
+        /// 这里是处理中途变多的情况
       {
         return Arrays.copyOf(r, i);
       }
       r[i] = it.next();
     }
+    /// 中途变少时，情况更复杂些，要扩大array
     return it.hasNext() ? finishToArray(r, it) : r;
   }
 
@@ -211,6 +214,7 @@ public abstract class AbstractCollection<E> implements Collection<E> {
    * Some VMs reserve some header words in an array.
    * Attempts to allocate larger arrays may result in
    * OutOfMemoryError: Requested array size exceeds VM limit
+   /// the size of object header can not exceed 8 byte
    */
   private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 

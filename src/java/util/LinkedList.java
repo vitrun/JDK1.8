@@ -78,6 +78,11 @@ import java.util.function.Consumer;
  * @see List
  * @see ArrayList
  * @since 1.2
+ * /// 底层的数据结构, CRUD的时间复杂度
+ * /// 如何实现ConcurrentModificationException的检查
+ * /// 如何确保一次next只能调用一次remove
+ * /// 如何保证可边iterate边删除
+ * /// 最多可放多少元素
  */
 
 public class LinkedList<E>
@@ -361,6 +366,7 @@ public class LinkedList<E>
    * @param o element to be removed from this list, if present
    * @return {@code true} if this list contained the specified element
    */
+  /// 注意只去除第一个,为什么不提供removeAll?
   public boolean remove(Object o) {
     if (o == null) {
       for (Node<E> x = first; x != null; x = x.next) {
@@ -447,6 +453,7 @@ public class LinkedList<E>
     }
 
     size += numNew;
+    /// addAll只记录一次mod count!
     modCount++;
     return true;
   }
@@ -606,6 +613,7 @@ public class LinkedList<E>
    * @return the index of the first occurrence of the specified element in this list, or -1 if this
    * list does not contain the element
    */
+  /// O(n)的复杂度，所以list的contains也不会快
   public int indexOf(Object o) {
     int index = 0;
     if (o == null) {
@@ -935,6 +943,7 @@ public class LinkedList<E>
       return nextIndex - 1;
     }
 
+    /// 每次调用next时更新lastReturned，每次调remove后再置为null，这样很方便实现一次next只能调用一次remove
     public void remove() {
       checkForComodification();
       if (lastReturned == null) {
@@ -949,6 +958,7 @@ public class LinkedList<E>
         nextIndex--;
       }
       lastReturned = null;
+      /// addd 和remove时维护iterator视角的mod count
       expectedModCount++;
     }
 
@@ -984,6 +994,7 @@ public class LinkedList<E>
     }
 
     final void checkForComodification() {
+      /// 对比list视角和iterator视角的mod count
       if (modCount != expectedModCount) {
         throw new ConcurrentModificationException();
       }
@@ -1017,6 +1028,7 @@ public class LinkedList<E>
 
     private final ListItr itr = new ListItr(size());
 
+    /// 很简单就实现了反向遍历
     public boolean hasNext() {
       return itr.hasPrevious();
     }

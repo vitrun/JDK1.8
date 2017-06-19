@@ -143,6 +143,7 @@ public interface Collection<E> extends Iterable<E> {
   /**
    * Returns the number of elements in this collection.  If this collection
    * contains more than <tt>Integer.MAX_VALUE</tt> elements, returns
+   /// 不限制大小
    * <tt>Integer.MAX_VALUE</tt>.
    *
    * @return the number of elements in this collection
