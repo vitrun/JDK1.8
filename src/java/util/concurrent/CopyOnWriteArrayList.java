@@ -59,6 +59,7 @@ import java.util.function.UnaryOperator;
  *
  * <p>This is ordinarily too costly, but may be <em>more</em> efficient
  * than alternatives when traversal operations vastly outnumber
+ * /// 注意，读远大于写才有性能优势, 在修改时先复制一个快照来修改，改完再让内部指针指向新数组
  * mutations, and is useful when you cannot or don't want to
  * synchronize traversals, yet need to preclude interference among
  * concurrent threads.  The "snapshot" style iterator method uses a
@@ -67,6 +68,7 @@ import java.util.function.UnaryOperator;
  * iterator, so interference is impossible and the iterator is
  * guaranteed not to throw {@code ConcurrentModificationException}.
  * The iterator will not reflect additions, removals, or changes to
+ * /// 注意，快照之后的变更无法在本快照中体现, 允许这点的场景才适用
  * the list since the iterator was created.  Element-changing
  * operations on iterators themselves ({@code remove}, {@code set}, and
  * {@code add}) are not supported. These methods throw
@@ -88,6 +90,9 @@ import java.util.function.UnaryOperator;
  * @param <E> the type of elements held in this collection
  * @author Doug Lea
  * @since 1.5
+ * /// write时要不要加锁，为什么？
+ * // addIfAbsent为什么要加锁前后各要判断一次？
+ * // CopyOnWrite适用于什么场景?
  */
 public class CopyOnWriteArrayList<E>
     implements List<E>, RandomAccess, Cloneable, java.io.Serializable {
@@ -627,6 +632,8 @@ public class CopyOnWriteArrayList<E>
    */
   public boolean addIfAbsent(E e) {
     Object[] snapshot = getArray();
+    /// 不加锁时先挡一道，如果已经存在，直接返回，如果不存在，加锁后得判断一回
+    // 性能不会好
     return indexOf(e, snapshot, 0, snapshot.length) >= 0 ? false :
         addIfAbsent(e, snapshot);
   }

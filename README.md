@@ -1,4 +1,11 @@
 # JDK1.8
+
+## Introduction
+JDK源码阅读，注释
+- 文件开头的备注，是关于此类的重点或关键问题
+- `///`开头或`/\*/`开头的注释，是阅读过程中添加的
+
+## Content
 ### java.util.concurrent
 - AQS
   - [深入理解AbstractQueuedSynchronizer（一）](http://ideabuffer.cn/2017/03/15/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3AbstractQueuedSynchronizer%EF%BC%88%E4%B8%80%EF%BC%89/)
@@ -15,3 +22,4 @@
 - COLLECTION
   - [Why the maximum array size of ArrayList is Integer.MAX\_VALUE - 8](https://stackoverflow.com/questions/35756277/why-the-maximum-array-size-of-arraylist-is-integer-max-value-8)
   - [Java 集合系列01之 总体框架](http://wangkuiwu.github.io/2012/02/01/collection-01-summary/)
+  - [通过ArrayList来说明fail-fast的原理、解决办法](http://wangkuiwu.github.io/2012/02/01/collection-01-summary/)
