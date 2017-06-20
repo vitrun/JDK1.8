@@ -101,6 +101,13 @@ import java.util.function.UnaryOperator;
  * @see LinkedList
  * @see Vector
  * @since 1.2
+ * /// 底层的数据结构, CRUD的时间复杂度
+ * // 如何实现ConcurrentModificationException的检查
+ * // 两个toArray方法的使用
+ * // 如何确保一次next只能调用一次remove
+ * // 如何保证可边iterate边删除
+ * // 最多可放多少元素
+ * // 和copyOnWriteArrayList的异同？
  */
 
 public class ArrayList<E> extends AbstractList<E>
@@ -177,6 +184,7 @@ public class ArrayList<E> extends AbstractList<E>
     if ((size = elementData.length) != 0) {
       // c.toArray might (incorrectly) not return Object[] (see 6260652)
       if (elementData.getClass() != Object[].class) {
+        /// 注意copyOf返回的是泛型，不是Object[]， 上面的toArray其实调用的也是copyOf
         elementData = Arrays.copyOf(elementData, size, Object[].class);
       }
     } else {
@@ -411,6 +419,8 @@ public class ArrayList<E> extends AbstractList<E>
    * @throws NullPointerException if the specified array is null
    */
   @SuppressWarnings("unchecked")
+  /// 注意上面的toArray()返回的是Object[], 常用的是这个，如：
+  // list.toArray(new Integer[0]);
   public <T> T[] toArray(T[] a) {
     if (a.length < size)
     // Make a new array of a's runtime type, but my contents:
@@ -509,6 +519,7 @@ public class ArrayList<E> extends AbstractList<E>
 
     int numMoved = size - index - 1;
     if (numMoved > 0) {
+      /// remove是个耗时的操作
       System.arraycopy(elementData, index + 1, elementData, index,
           numMoved);
     }
@@ -897,6 +908,8 @@ public class ArrayList<E> extends AbstractList<E>
     @SuppressWarnings("unchecked")
     public void forEachRemaining(Consumer<? super E> consumer) {
       Objects.requireNonNull(consumer);
+      /// An Inner class has a reference to an outer class.
+      // To use the outer class this you put the class of the outer class before it.
       final int size = ArrayList.this.size;
       int i = cursor;
       if (i >= size) {
