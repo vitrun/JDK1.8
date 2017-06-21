@@ -204,6 +204,8 @@ import java.util.function.LongConsumer;
  *         return false;
  *     }
  *
+ * /// 分裂出新的split iterator，老的内容也减半
+ * mid = (lo+fence)/2, 当lo >= mid 也就是 2lo >= lo + fence，亦即 lo >= fence时无法再分裂(为空)
  *     public Spliterator<T> trySplit() {
  *       int lo = origin; // divide range in half
  *       int mid = ((lo + fence) >>> 1) & ~1; // force midpoint to be even

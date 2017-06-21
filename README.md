@@ -23,3 +23,4 @@ JDK源码阅读，注释
   - [Why the maximum array size of ArrayList is Integer.MAX\_VALUE - 8](https://stackoverflow.com/questions/35756277/why-the-maximum-array-size-of-arraylist-is-integer-max-value-8)
   - [Java 集合系列01之 总体框架](http://wangkuiwu.github.io/2012/02/01/collection-01-summary/)
   - [通过ArrayList来说明fail-fast的原理、解决办法](http://wangkuiwu.github.io/2012/02/01/collection-01-summary/)
+  - [A quick introduction to Parallelism and the Spliterator](https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator/)

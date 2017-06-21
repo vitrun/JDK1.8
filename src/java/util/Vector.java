@@ -79,6 +79,8 @@ import java.util.function.UnaryOperator;
  * @see Collection
  * @see LinkedList
  * @since JDK1.0
+ * /// Vector和ArrayList有什么异同？
+ *
  */
 public class Vector<E>
     extends AbstractList<E>
@@ -1272,6 +1274,7 @@ public class Vector<E>
     int removeCount = 0;
     final int size = elementCount;
     final BitSet removeSet = new BitSet(size);
+    /// 统一标识出要删除的元素，而不是判断一个执行一个
     final int expectedModCount = modCount;
     for (int i = 0; modCount == expectedModCount && i < size; i++) {
       @SuppressWarnings("unchecked") final E element = (E) elementData[i];
