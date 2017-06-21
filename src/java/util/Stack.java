@@ -45,6 +45,7 @@ package java.util;
  * @author Jonathan Payne
  * @since JDK1.0
  */
+/// 继承于Vector，所以也是线程安全的
 public class Stack<E> extends Vector<E> {
 
   /**
@@ -128,6 +129,7 @@ public class Stack<E> extends Vector<E> {
   public synchronized int search(Object o) {
     int i = lastIndexOf(o);
 
+    /// 注意是离栈顶的距离，而且栈顶是1
     if (i >= 0) {
       return size() - i;
     }
