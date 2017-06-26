@@ -24,3 +24,12 @@ JDK源码阅读，注释
   - [Java 集合系列01之 总体框架](http://wangkuiwu.github.io/2012/02/01/collection-01-summary/)
   - [通过ArrayList来说明fail-fast的原理、解决办法](http://wangkuiwu.github.io/2012/02/01/collection-01-summary/)
   - [A quick introduction to Parallelism and the Spliterator](https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator/)
+  - [JDK 源码中 HashMap 的 hash 方法原理是什么？](https://www.zhihu.com/question/20733617)
+
+
+### java.util.stream
+### java.util.function
+### java.lang.reflect
+### java.lang
+### java.net
+### java.nio
