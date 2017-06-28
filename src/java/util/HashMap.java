@@ -137,6 +137,7 @@ import java.util.function.Function;
 // hash冲突怎么解决？
 // why the default initial capacity MUST be a power of two?
 // 在什么情况下扩张，是如何扩张的?
+/// 元素减少时，会收缩吗?
 public class HashMap<K, V> extends AbstractMap<K, V>
     implements Map<K, V>, Cloneable, Serializable {
 
@@ -676,6 +677,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         for (int binCount = 0; ; ++binCount) {
           if ((e = p.next) == null) {
             p.next = newNode(hash, key, value, null);
+            /// treeify是插入时同时检查和执行的
             if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
             {
               treeifyBin(tab, hash);
@@ -699,6 +701,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
       }
     }
     ++modCount;
+    /// 扩张也是同步判断和执行的，所以恰好触发时会比较慢
     if (++size > threshold) {
       resize();
     }
@@ -721,6 +724,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
     int oldThr = threshold;
     int newCap, newThr = 0;
     if (oldCap > 0) {
+      ///已经最大了，则不再扩张, 所以此时loadfactor很大，冲突量比较大，查询不再是O(1)
       if (oldCap >= MAXIMUM_CAPACITY) {
         threshold = Integer.MAX_VALUE;
         return oldTab;
@@ -742,6 +746,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
     }
     threshold = newThr;
     @SuppressWarnings({"rawtypes", "unchecked"})
+    /// 按newCap创建新的数组
     Node<K, V>[] newTab = (Node<K, V>[]) new Node[newCap];
     table = newTab;
     if (oldTab != null) {
@@ -749,6 +754,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
         Node<K, V> e;
         if ((e = oldTab[j]) != null) {
           oldTab[j] = null;
+          ///普通节点, 位置是hash求余
           if (e.next == null) {
             newTab[e.hash & (newCap - 1)] = e;
           } else if (e instanceof TreeNode) {
@@ -964,6 +970,7 @@ public class HashMap<K, V> extends AbstractMap<K, V>
     }
 
     public final void clear() {
+      /// 注意会clear掉map
       HashMap.this.clear();
     }
 
